@@ -13,7 +13,7 @@ const signUpService = async (email, password, name) => {
     const newUser = new User({ email, password: hashedPassword, name });
     await newUser.save();
 
-    return { ...newUser.toObject() };
+    return newUser.toObject();
   } catch (error) {
     console.log(error);
     throw new Error(error.message || "Error during signup");
