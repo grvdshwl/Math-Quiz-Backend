@@ -10,10 +10,10 @@ const signUpService = async (email, password, name) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ email, password: hashedPassword, name }).lean();
+    const newUser = new User({ email, password: hashedPassword, name });
     await newUser.save();
 
-    return { ...newUser };
+    return { ...newUser.toObject() };
   } catch (error) {
     console.log(error);
     throw new Error(error.message || "Error during signup");
