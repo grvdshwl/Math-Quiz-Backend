@@ -4,13 +4,13 @@ const User = require("../models/User");
 
 const signUpService = async (email, password, name) => {
   try {
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email }).lean();
     if (existingUser) {
       throw new Error("User already exists with this email");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ email, password: hashedPassword, name });
+    const newUser = new User({ email, password: hashedPassword, name }).lean();
     await newUser.save();
 
     return { ...newUser };
