@@ -16,18 +16,21 @@ const checkAnswer = (correctAnswer, answer) => {
 };
 
 const submitAnswer = async (email, questionId, answer) => {
-  const question = await findQuestionById(questionId);
-  if (!question) throw new Error("Question not found");
-
-  if (question.winner)
-    throw new Error("This question has already been answered");
+  const question = await Question.findOne({
+    _id: questionId,
+    status: "active",
+  });
+  if (!question) throw new Error("This question has already been answered");
 
   if (!checkAnswer(question.answer, answer))
-    throw new Error("Incorrect answer");
+    throw new Error("Incorrect answer! Please try again.");
 
-  question.winner = email;
-  question.status = "solved";
-  await question.save();
+  await Question.findOneAndUpdate(
+    { _id: questionId },
+    { winner: email, status: "solved" },
+    { new: true }
+  );
+
   await User.findOneAndUpdate({ email }, { $inc: { score: 1 } });
 
   return { isWinner: true, success: true };

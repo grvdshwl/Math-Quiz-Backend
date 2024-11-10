@@ -12,7 +12,7 @@ const submitAnswer = async (req, res) => {
       answer
     );
     const user = await getUserDetailsByEmail(email);
-
+    await questionService.createNewQuestion();
     return res.status(200).json({ ...response, user });
   } catch (error) {
     const status =
