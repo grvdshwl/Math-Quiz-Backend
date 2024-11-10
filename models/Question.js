@@ -14,6 +14,11 @@ const questionSchema = new mongoose.Schema({
     type: String,
     default: null, // Initially, no winner
   },
+  status: {
+    type: String,
+    enum: ["active", "solved"],
+    default: "active",
+  },
   createdAt: {
     type: Date,
     default: Date.now,

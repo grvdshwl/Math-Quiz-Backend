@@ -26,8 +26,15 @@ const submitAnswer = async (req, res) => {
 
 const getCurrentQuestion = async (req, res) => {
   try {
-    const question = await questionService.createNewQuestion();
-    return res.status(200).json({ question, success: true });
+    const activeQuestion = await questionService.getActiveQuestion();
+    let finalQuestion;
+    if (activeQuestion) {
+      finalQuestion = activeQuestion;
+    } else {
+      const newQuestion = await questionService.createNewQuestion();
+      finalQuestion = newQuestion;
+    }
+    return res.status(200).json({ question: finalQuestion, success: true });
   } catch (error) {
     return res.status(500).json({
       message: "An error occurred while retrieving the current question.",

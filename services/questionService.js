@@ -6,6 +6,11 @@ const findQuestionById = async (questionId) => {
   return await Question.findById(questionId);
 };
 
+const getActiveQuestion = async () => {
+  let activeQuestion = await Question.find({ status: "active" });
+  return activeQuestion;
+};
+
 const checkAnswer = (correctAnswer, answer) => {
   return String(correctAnswer) === String(answer);
 };
@@ -21,6 +26,7 @@ const submitAnswer = async (email, questionId, answer) => {
     throw new Error("Incorrect answer");
 
   question.winner = email;
+  question.status = "solved";
   await question.save();
   await User.findOneAndUpdate({ email }, { $inc: { score: 1 } });
 
@@ -43,4 +49,5 @@ module.exports = {
   submitAnswer,
   createNewQuestion,
   checkQuestionWinner,
+  getActiveQuestion,
 };
