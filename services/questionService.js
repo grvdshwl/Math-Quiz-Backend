@@ -7,7 +7,7 @@ const findQuestionById = async (questionId) => {
 };
 
 const getActiveQuestion = async () => {
-  let activeQuestion = await Question.find({ status: "active" });
+  let activeQuestion = await Question.findOne({ status: "active" });
   return activeQuestion;
 };
 
